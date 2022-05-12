@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.progweb.DiarioEscolar.domain.Aluno;
 import com.progweb.DiarioEscolar.services.AlunoService;
@@ -28,7 +27,7 @@ public class AlunoController {
 	private AlunoService alunoService;
 	
 	@GetMapping()
-	public ResponseEntity<List<Aluno>> ListarAlunos(){
+	public ResponseEntity<List<Aluno>> listarAlunos(){
 		return ResponseEntity.status(HttpStatus.OK).body(alunoService.ListarAlunos());
 	}
 	
@@ -38,19 +37,19 @@ public class AlunoController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> pegarAluno(@PathVariable Long id){
-		boolean alunoExiste = alunoService.verificarAlunoExiste(id);
+	public ResponseEntity<Object> buscarAluno(@PathVariable Long id){
+		boolean alunoExiste = alunoService.verificarSeAlunoExiste(id);
 
 		if(!alunoExiste){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(alunoService.pegarAluno(id).get());
+		return ResponseEntity.status(HttpStatus.OK).body(alunoService.buscarAluno(id).get());
 
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> atualizarAluno(@PathVariable("id") Long id, @RequestBody Aluno aluno){
-		boolean alunoExiste = alunoService.verificarAlunoExiste(id);
+		boolean alunoExiste = alunoService.verificarSeAlunoExiste(id);
 		
 		if(!alunoExiste){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
@@ -62,7 +61,7 @@ public class AlunoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deletarAluno(@PathVariable("id") Long id){
-		boolean alunoExiste = alunoService.verificarAlunoExiste(id);
+		boolean alunoExiste = alunoService.verificarSeAlunoExiste(id);
 		
 		if(!alunoExiste){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
