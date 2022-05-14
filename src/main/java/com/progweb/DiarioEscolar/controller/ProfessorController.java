@@ -25,18 +25,18 @@ public class ProfessorController {
 	private ProfessorService professorService;
 	
 	@GetMapping()
-	public ResponseEntity<List<Professor>> ListarProfessores(){
+	public ResponseEntity<List<Professor>> listarProfessores(){
 		return ResponseEntity.status(HttpStatus.OK).body(professorService.ListarProfessor());
 	}
 	
 	@PostMapping
 	public ResponseEntity<Object> registrarProfessor(@RequestBody Professor professor){
-		return ResponseEntity.status(HttpStatus.CREATED).body(professorService.adicionarAluno(professor));
+		return ResponseEntity.status(HttpStatus.CREATED).body(professorService.adicionarProfessor(professor));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> BuscarProfessor(@PathVariable Long id){
-		boolean professorExiste = professorService.verificarProfessorExiste(id);
+	public ResponseEntity<Object> buscarProfessor(@PathVariable Long id){
+		boolean professorExiste = professorService.verificarSeProfessorExiste(id);
 
 		if(!professorExiste){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Professor não encontrado");
@@ -47,19 +47,19 @@ public class ProfessorController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> atualizarProfessor(@PathVariable("id") Long id, @RequestBody Professor professor){
-		boolean professorExiste = professorService.verificarProfessorExiste(id);
+		boolean professorExiste = professorService.verificarSeProfessorExiste(id);
 		
 		if(!professorExiste){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Professor não encontrado");
 		}
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(professorService.atualizarProfessor(id, professor));
+		return ResponseEntity.status(HttpStatus.CREATED).body(professorService.atualizarProfessor(professor));
 
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deletarProfessor(@PathVariable("id") Long id){
-		boolean professorExiste = professorService.verificarProfessorExiste(id);
+		boolean professorExiste = professorService.verificarSeProfessorExiste(id);
 		
 		if(!professorExiste){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Professor não encontrado");
