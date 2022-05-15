@@ -39,37 +39,44 @@ public class TurmaService {
 		return turmaRepository.existsById(turmaID);
 	}
 
-	public Turma atualizarTurma(Long id, Turma turma){
-		turma.setId(id);
+	public Turma atualizarTurma(Turma turmaRecebida){
+		Turma turma = turmaRepository.findById(turmaRecebida.getId()).get();
+
+		turma.setNomeDisciplina(turmaRecebida.getNomeDisciplina());
+		turma.setSala(turmaRecebida.getSala());
+		
 		return turmaRepository.save(turma);
 	}
+
 	public void deletarTurma(Long turmaID){
 		turmaRepository.deleteById(turmaID);
 	}
 
 
 	
-    public void vincularProfessor(Long idTurma, Long idProf, Turma turma){
+    public void vincularProfessor(Long idTurma, Long idProf){
 
         Professor professor = professorService.buscarProfessor(idProf).get();   
+		Turma turma = turmaRepository.findById(idTurma).get();
 
-        turma.getProfessores().add(professor);
+        turma.setProfessor(professor);
         professor.getTurmas().add(turma);
 
-        //atualizar professor/turma e nao adicionar
+        
         professorService.adicionarProfessor(professor);
-        turmaRepository.save(turma);
+        this.adicionarTurma(turma);
     }
 
-	public void matricularAluno(Long idTurma, Long idAluno, Turma turma){
+	public void matricularAluno(Long idTurma, Long idAluno){
 
         Aluno aluno = alunoService.buscarAluno(idAluno).get();
+		Turma turma = turmaRepository.findById(idTurma).get();
 
         turma.getAlunos().add(aluno);
         aluno.getTurmas().add(turma);
 
-        //atualizar aluno/turma e nao adicionar
-        alunoService.adicionarAluno(aluno);
-        turmaRepository.save(turma);
+		alunoService.adicionarAluno(aluno);
+		this.adicionarTurma(turma);
+
     }
 }

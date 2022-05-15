@@ -19,7 +19,7 @@ public class ProfessorService {
 		return professorRepository.findAll();
 	}
 
-	public Professor adicionarAluno(Professor professor){
+	public Professor adicionarProfessor(Professor professor){
 		return professorRepository.save(professor);
 	}
 
@@ -27,14 +27,19 @@ public class ProfessorService {
 		return professorRepository.findById(professorID);
 	}
 
-	public boolean verificarProfessorExiste(Long professorID){
+	public boolean verificarSeProfessorExiste(Long professorID){
 		return professorRepository.existsById(professorID);
 	}
 
-	public Professor atualizarProfessor(Long id, Professor professor){
-		professor.setId(id);
-		return professorRepository.save(professor);
+	public Professor atualizarProfessor(Professor professorRecebido){
+		Professor professorBD = professorRepository.findById(professorRecebido.getId()).get();
+
+		professorRecebido.setId(professorBD.getId());
+		professorRecebido.setTurmas(professorBD.getTurmas());
+
+		return professorRepository.save(professorRecebido);
 	}
+	
 	public void deletarProfessor(Long professorID){
 		professorRepository.deleteById(professorID);
 	}

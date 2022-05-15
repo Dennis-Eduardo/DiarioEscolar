@@ -3,12 +3,13 @@ package com.progweb.DiarioEscolar.domain;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -33,13 +34,20 @@ public class Professor implements Serializable{
 	@Column(name = "email", unique = true)
 	private String email;
 	
-	//RELACIONAMENTOS
-	
-	@ManyToMany
+	//RELACIONAMENTO
+	@OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Turma> turmas;
 
 
-	
+
+	public List<Turma> getTurmas() {
+		return turmas;
+	}
+
+	public void setTurmas(List<Turma> turmas) {
+		this.turmas = turmas;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -4,6 +4,7 @@ package com.progweb.DiarioEscolar.domain;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,13 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "aluno")
@@ -38,10 +36,10 @@ public class Aluno implements Serializable{
 	@Column(name = "email", unique = true)
 	private String email;
 
-	// RELACIONAMENTOS
-	@ManyToMany
-	@JoinTable(name = "aluno_turma", joinColumns = @JoinColumn(name = "aluno_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "turma_id", referencedColumnName = "id"))
-
+	// RELACIONAMENTO
+	@ManyToMany(cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "aluno_turma", joinColumns = @JoinColumn(name = "aluno_id"), inverseJoinColumns = @JoinColumn(name = "turma_id"))
+    @JsonIgnore
 	private List<Turma> turmas;
 
 

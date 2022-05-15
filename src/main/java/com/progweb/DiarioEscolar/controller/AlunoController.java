@@ -55,7 +55,7 @@ public class AlunoController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
 		}
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.atualizarAluno(id, aluno));
+		return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.atualizarAluno(aluno));
 
 	}
 

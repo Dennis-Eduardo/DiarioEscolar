@@ -23,18 +23,23 @@ public class AlunoService {
 		return alunoRepository.save(aluno);
 	}
 
-	public Optional<Aluno> pegarAluno(Long alunoID){
+	public Optional<Aluno> buscarAluno(Long alunoID){
 		return alunoRepository.findById(alunoID);
 	}
 
-	public boolean verificarAlunoExiste(Long alunoID){
+	public boolean verificarSeAlunoExiste(Long alunoID){
 		return alunoRepository.existsById(alunoID);
 	}
 
-	public Aluno atualizarAluno(Long id, Aluno aluno){
-		aluno.setId(id);
-		return alunoRepository.save(aluno);
+	public Aluno atualizarAluno(Aluno alunoRecebido){
+		Aluno alunoBD = alunoRepository.findById(alunoRecebido.getId()).get();
+
+		alunoRecebido.setId(alunoBD.getId());
+		alunoRecebido.setTurmas(alunoBD.getTurmas());
+
+		return alunoRepository.save(alunoRecebido);
 	}
+
 	public void deletarAluno(Long alunoID){
 		alunoRepository.deleteById(alunoID);
 	}

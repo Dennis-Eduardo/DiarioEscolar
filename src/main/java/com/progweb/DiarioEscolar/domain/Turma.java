@@ -4,15 +4,18 @@ package com.progweb.DiarioEscolar.domain;
 import java.io.Serializable;
 import java.util.List;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -34,12 +37,15 @@ public class Turma implements Serializable{
 	private String sala;
 
 
-    //ligacao
-    @ManyToMany(mappedBy = "turmas")
+    //RELACIONAMENTOS
+    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @JsonIgnore
     private List<Aluno> alunos;
 
-    @ManyToMany(mappedBy = "turmas")
-    private List<Professor> professores;
+    @ManyToOne
+    @JoinColumn(name = "professor_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Professor professor;
 
 
     public List<Aluno> getAlunos() {
@@ -50,10 +56,15 @@ public class Turma implements Serializable{
         this.alunos = alunos;
     }
 
-    public List<Professor> getProfessores() {
-        return professores;
+
+
+    public Professor getProfessor() {
+        return professor;
     }
 
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
 
     public Long getId() {
         return id;
