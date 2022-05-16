@@ -1,3 +1,3 @@
 # DiarioEscolar
-Equipe: Dennis Eduardo
+Equipe: Dennis Eduardo      
         Romenildo Ferreira
