@@ -36,6 +36,7 @@ public class AlunoController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.adicionarAluno(aluno));
 	}
 
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> buscarAluno(@PathVariable Long id){
 		boolean alunoExiste = alunoService.verificarSeAlunoExiste(id);
