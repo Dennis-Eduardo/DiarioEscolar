@@ -31,13 +31,10 @@ public class ProfessorService {
 		return professorRepository.existsById(professorID);
 	}
 
-	public Professor atualizarProfessor(Professor professorRecebido){
-		Professor professorBD = professorRepository.findById(professorRecebido.getId()).get();
+	public Professor atualizarProfessor(Long id, Professor professor){
+		professor.setId(id);
 
-		professorRecebido.setId(professorBD.getId());
-		professorRecebido.setTurmas(professorBD.getTurmas());
-
-		return professorRepository.save(professorRecebido);
+		return professorRepository.save(professor);
 	}
 	
 	public void deletarProfessor(Long professorID){

@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "professor")
 public class Professor implements Serializable{
@@ -36,6 +38,7 @@ public class Professor implements Serializable{
 	
 	//RELACIONAMENTO
 	@OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Turma> turmas;
 
 

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.progweb.DiarioEscolar.domain.Turma;
 import com.progweb.DiarioEscolar.services.AlunoService;
 import com.progweb.DiarioEscolar.services.ProfessorService;
@@ -22,6 +25,7 @@ import com.progweb.DiarioEscolar.services.TurmaService;
 
 @RestController
 @RequestMapping(value = "/turmas")
+@Api(value = "Aluno")
 public class TurmaController {
 	
 	@Autowired
@@ -35,16 +39,19 @@ public class TurmaController {
 	
 	
 	@GetMapping()
+	@ApiOperation(value = "Retorna a lista de todas as turmas cadastrados.")
 	public ResponseEntity<List<Turma>> listarTurmas(){
 		return ResponseEntity.status(HttpStatus.OK).body(turmaService.ListarTurmas());
 	}
 	
 	@PostMapping
+	@ApiOperation(value = "Cadastra uma nova turma.")
 	public ResponseEntity<Object> registrarTurma(@RequestBody Turma turma){
 		return ResponseEntity.status(HttpStatus.CREATED).body(turmaService.adicionarTurma(turma));
 	}
 
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna uma turma pelo seu {id}.")
 	public ResponseEntity<Object> buscarTurma(@PathVariable Long id){
 		boolean turmaExiste = turmaService.verificarSeTurmaExiste(id);
 
@@ -56,6 +63,7 @@ public class TurmaController {
 	}
 
 	@PutMapping("/{id}")
+	@ApiOperation(value = "Atualiza os dados de uma turma.")
 	public ResponseEntity<Object> atualizarTurma(@PathVariable("id") Long id, @RequestBody Turma turma){
 		boolean turmaExiste = turmaService.verificarSeTurmaExiste(id);
 		
@@ -68,6 +76,7 @@ public class TurmaController {
 	}
 
 	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Deleta uma turma Cadastrado.")
 	public ResponseEntity<Object> deletarTurma(@PathVariable("id") Long id){
 		boolean turmaExiste = turmaService.verificarSeTurmaExiste(id);
 		
@@ -82,6 +91,7 @@ public class TurmaController {
     //PATCH
 	
 	@PatchMapping("/{idTurma}/matricularAluno/{idAluno}")
+	@ApiOperation(value = "Matricular um aluno a uma turma.")
     public ResponseEntity<Object> matricularAluno(@PathVariable("idTurma") Long idTurma,@PathVariable("idAluno") Long idAluno, @RequestBody Turma turma){
         boolean turmaExiste = turmaService.verificarSeTurmaExiste(idTurma);
         boolean alunoExiste = alunoService.verificarSeAlunoExiste(idAluno);
@@ -96,6 +106,7 @@ public class TurmaController {
     }
 
 	@PatchMapping("/{idTurma}/vincularProfessor/{idProf}")
+	@ApiOperation(value = "Vincula um Professor a uma turma.")
     public ResponseEntity<Object> vincularProfessor(@PathVariable("idTurma") Long idTurma,@PathVariable("idProf") Long idProf, @RequestBody Turma turma){
         boolean turmaExiste = turmaService.verificarSeTurmaExiste(idTurma);
         boolean profExiste = professorService.verificarSeProfessorExiste(idProf);

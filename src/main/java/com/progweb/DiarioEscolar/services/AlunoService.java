@@ -31,13 +31,10 @@ public class AlunoService {
 		return alunoRepository.existsById(alunoID);
 	}
 
-	public Aluno atualizarAluno(Aluno alunoRecebido){
-		Aluno alunoBD = alunoRepository.findById(alunoRecebido.getId()).get();
+	public Aluno atualizarAluno(Long id, Aluno aluno){
+		aluno.setId(id);
 
-		alunoRecebido.setId(alunoBD.getId());
-		alunoRecebido.setTurmas(alunoBD.getTurmas());
-
-		return alunoRepository.save(alunoRecebido);
+		return alunoRepository.save(aluno);
 	}
 
 	public void deletarAluno(Long alunoID){
