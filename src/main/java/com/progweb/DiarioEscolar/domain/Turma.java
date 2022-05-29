@@ -31,7 +31,7 @@ public class Turma implements Serializable{
 	private Long id;
 
 	@Column(name = "nome")
-	private String nomeDisciplina;
+	private String nome;
 
 	@Column(name = "sala")
 	private String sala;
@@ -74,12 +74,12 @@ public class Turma implements Serializable{
         this.id = id;
     }
 
-    public String getNomeDisciplina() {
-        return nomeDisciplina;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeDisciplina(String nomeDisciplina) {
-        this.nomeDisciplina = nomeDisciplina;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getSala() {

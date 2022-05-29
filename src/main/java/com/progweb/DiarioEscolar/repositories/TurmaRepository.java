@@ -7,5 +7,6 @@ import com.progweb.DiarioEscolar.domain.Turma;
 
 @Repository
 public interface TurmaRepository extends JpaRepository<Turma, Long> {
+    public Boolean findByNomeTurmaBoolean(String nome);
 
 }

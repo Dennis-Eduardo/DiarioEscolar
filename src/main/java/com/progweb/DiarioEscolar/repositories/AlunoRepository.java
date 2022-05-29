@@ -7,5 +7,5 @@ import com.progweb.DiarioEscolar.domain.Aluno;
 
 @Repository
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
-
+    public Boolean findByNomeAlunoBoolean(String nome);
 }

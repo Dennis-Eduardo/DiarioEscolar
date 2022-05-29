@@ -7,5 +7,5 @@ import com.progweb.DiarioEscolar.domain.Professor;
 
 @Repository
 public interface ProfessorRepository extends JpaRepository<Professor, Long> {
-
+    public Boolean findByNomeProfessorBoolean(String nome);
 }

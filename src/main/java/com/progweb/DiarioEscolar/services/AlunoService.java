@@ -1,13 +1,14 @@
 package com.progweb.DiarioEscolar.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progweb.DiarioEscolar.domain.Aluno;
+import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.repositories.AlunoRepository;
+import javassist.NotFoundException;
 
 @Service
 public class AlunoService {
@@ -19,12 +20,14 @@ public class AlunoService {
 		return alunoRepository.findAll();
 	}
 
-	public Aluno adicionarAluno(Aluno aluno){
+	public Aluno adicionarAluno(Aluno aluno) throws ExistingObjectSameNameException{
+		if (alunoRepository.findByNomeAlunoBoolean(aluno.getNome()))
+            throw new ExistingObjectSameNameException("Já existe um aluno com esse nome!");
 		return alunoRepository.save(aluno);
 	}
 
-	public Optional<Aluno> buscarAluno(Long alunoID){
-		return alunoRepository.findById(alunoID);
+	public Aluno buscarAluno(Long alunoID) throws NotFoundException{
+		return alunoRepository.findById(alunoID).orElseThrow(() -> new NotFoundException("Não existe um aluno com esse id!"));
 	}
 
 	public boolean verificarSeAlunoExiste(Long alunoID){
@@ -35,10 +38,12 @@ public class AlunoService {
 		aluno.setId(id);
 
 		return alunoRepository.save(aluno);
+		
 	}
 
 	public void deletarAluno(Long alunoID){
-		alunoRepository.deleteById(alunoID);
+		Aluno alunoToDelete = alunoRepository.findById(alunoID).get();
+        alunoRepository.delete(alunoToDelete);
 	}
 
 }

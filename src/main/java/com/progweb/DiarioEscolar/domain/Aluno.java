@@ -83,7 +83,13 @@ public class Aluno implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public boolean isPresent() {
+		if(this.nome == null){
+			return false;
+		}
+		return true;
+	}
 	
 
 }

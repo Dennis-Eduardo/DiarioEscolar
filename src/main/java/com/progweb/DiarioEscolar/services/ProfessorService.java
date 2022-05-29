@@ -1,12 +1,14 @@
 package com.progweb.DiarioEscolar.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javassist.NotFoundException;
+
 import com.progweb.DiarioEscolar.domain.Professor;
+import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.repositories.ProfessorRepository;
 
 @Service
@@ -19,12 +21,14 @@ public class ProfessorService {
 		return professorRepository.findAll();
 	}
 
-	public Professor adicionarProfessor(Professor professor){
+	public Professor adicionarProfessor(Professor professor) throws ExistingObjectSameNameException{
+		if (professorRepository.findByNomeProfessorBoolean(professor.getNome()))
+            throw new ExistingObjectSameNameException("Já existe um professor com esse nome!");
 		return professorRepository.save(professor);
 	}
 
-	public Optional<Professor> buscarProfessor(Long professorID){
-		return professorRepository.findById(professorID);
+	public Professor buscarProfessor(Long professorID) throws NotFoundException{
+		return professorRepository.findById(professorID).orElseThrow(() -> new NotFoundException("Não existe um professor com esse id!"));
 	}
 
 	public boolean verificarSeProfessorExiste(Long professorID){
@@ -38,7 +42,8 @@ public class ProfessorService {
 	}
 	
 	public void deletarProfessor(Long professorID){
-		professorRepository.deleteById(professorID);
+		Professor professorToDelete = professorRepository.findById(professorID).get();
+        professorRepository.delete(professorToDelete);
 	}
 
 }

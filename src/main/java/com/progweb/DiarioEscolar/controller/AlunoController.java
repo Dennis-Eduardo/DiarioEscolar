@@ -2,25 +2,23 @@ package com.progweb.DiarioEscolar.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.progweb.DiarioEscolar.domain.Aluno;
+import com.progweb.DiarioEscolar.dto.AlunoDTO;
+import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.services.AlunoService;
+import com.progweb.DiarioEscolar.settings.mappers.AlunoMapper;
+
+import javassist.NotFoundException;
+
 
 @RestController
 @RequestMapping(value= "/alunos")
@@ -29,42 +27,47 @@ public class AlunoController {
 	
 	@Autowired
 	private AlunoService alunoService;
+
+	@Autowired
+    private AlunoMapper alunoMapper;
 	
 	@GetMapping()
 	@ApiOperation(value = "Retorna a lista de todos os alunos cadastrados.")
-	public ResponseEntity<List<Aluno>> listarAlunos(){
-		return ResponseEntity.status(HttpStatus.OK).body(alunoService.ListarAlunos());
-	}
+	public List<AlunoDTO> listarAlunos() {
+        List<Aluno> alunos = alunoService.ListarAlunos();
+        return alunos.stream()
+						.map(alunoMapper::convertToAlunoDTO)
+                        .collect(Collectors.toList());
+    }
 	
 	
 	@PostMapping
 	@ApiOperation(value = "Cadastra um novo aluno.")
-	public ResponseEntity<Object> registrarAluno(@RequestBody Aluno aluno){
-		return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.adicionarAluno(aluno));
+	public ResponseEntity<Object> registrarAluno(@RequestBody AlunoDTO alunoDTO) throws ExistingObjectSameNameException{
+		try {
+            Aluno aluno = alunoMapper.convertFromAlunoDTO(alunoDTO);
+            return new ResponseEntity<>(alunoService.adicionarAluno(aluno), HttpStatus.CREATED);
+
+        } catch (ExistingObjectSameNameException e) {
+            return ResponseEntity.badRequest().body("Nome do aluno ja Registrado");
+        }
 	}
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Retorna um aluno pelo seu {id}.")
-	public ResponseEntity<Object> buscarAluno(@PathVariable Long id){
-		boolean alunoExiste = alunoService.verificarSeAlunoExiste(id);
-
-		if(!alunoExiste){
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(alunoService.buscarAluno(id).get());
-
+	public ResponseEntity<?> buscarAluno(@PathVariable Long id){
+		try {
+            return new ResponseEntity<>(alunoMapper.convertToAlunoDTO(alunoService.buscarAluno(id)), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body("Aluno não encontrado");
+        }
 	}
 
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualiza os dados de um aluno.")
-	public ResponseEntity<Object> atualizarAluno(@PathVariable("id") Long id, @RequestBody Aluno aluno){
-		boolean alunoExiste = alunoService.verificarSeAlunoExiste(id);
-		
-		if(!alunoExiste){
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado");
-		}
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(alunoService.atualizarAluno(id, aluno));
+	public AlunoDTO atualizarAluno(@PathVariable("id") Long id, @RequestBody AlunoDTO alunoDTO){
+		Aluno aluno = alunoMapper.convertFromAlunoDTO(alunoDTO);
+        return alunoMapper.convertToAlunoDTO(alunoService.atualizarAluno(id, aluno));
 
 	}
 
