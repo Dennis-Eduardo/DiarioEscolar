@@ -22,8 +22,8 @@ import javassist.NotFoundException;
 import com.progweb.DiarioEscolar.domain.Professor;
 import com.progweb.DiarioEscolar.dto.ProfessorDTO;
 import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
+import com.progweb.DiarioEscolar.mappers.ProfessorMapper;
 import com.progweb.DiarioEscolar.services.ProfessorService;
-import com.progweb.DiarioEscolar.settings.mappers.ProfessorMapper;
 
 @RestController
 @RequestMapping(value = "/professores")

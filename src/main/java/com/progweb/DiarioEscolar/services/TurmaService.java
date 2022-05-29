@@ -1,7 +1,6 @@
 package com.progweb.DiarioEscolar.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class TurmaService {
 	}
 
 	public Turma adicionarTurma(Turma turma)throws ExistingObjectSameNameException{
-		if (turmaRepository.findByNomeTurmaBoolean(turma.getNome()))
+		if (turmaRepository.findByNome(turma.getNome()) != null)
             throw new ExistingObjectSameNameException("Já existe um turma com esse nome!");
 		return turmaRepository.save(turma);
 	}

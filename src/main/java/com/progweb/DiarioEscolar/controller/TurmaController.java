@@ -21,13 +21,12 @@ import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 
 import com.progweb.DiarioEscolar.domain.Turma;
-import com.progweb.DiarioEscolar.dto.GenericResponseErrorDTO;
+
 import com.progweb.DiarioEscolar.dto.TurmaDTO;
 import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
-import com.progweb.DiarioEscolar.services.AlunoService;
-import com.progweb.DiarioEscolar.services.ProfessorService;
+import com.progweb.DiarioEscolar.mappers.TurmaMapper;
+
 import com.progweb.DiarioEscolar.services.TurmaService;
-import com.progweb.DiarioEscolar.settings.mappers.TurmaMapper;
 
 @RestController
 @RequestMapping(value = "/turmas")

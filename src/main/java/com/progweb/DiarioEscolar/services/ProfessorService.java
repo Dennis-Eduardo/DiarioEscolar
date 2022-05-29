@@ -22,7 +22,7 @@ public class ProfessorService {
 	}
 
 	public Professor adicionarProfessor(Professor professor) throws ExistingObjectSameNameException{
-		if (professorRepository.findByNomeProfessorBoolean(professor.getNome()))
+		if (professorRepository.findByNome(professor.getNome()) != null)
             throw new ExistingObjectSameNameException("Já existe um professor com esse nome!");
 		return professorRepository.save(professor);
 	}

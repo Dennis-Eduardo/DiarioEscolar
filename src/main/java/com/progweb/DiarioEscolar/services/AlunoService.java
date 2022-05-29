@@ -21,7 +21,7 @@ public class AlunoService {
 	}
 
 	public Aluno adicionarAluno(Aluno aluno) throws ExistingObjectSameNameException{
-		if (alunoRepository.findByNomeAlunoBoolean(aluno.getNome()))
+		if (alunoRepository.findByNome(aluno.getNome()) != null)
             throw new ExistingObjectSameNameException("Já existe um aluno com esse nome!");
 		return alunoRepository.save(aluno);
 	}

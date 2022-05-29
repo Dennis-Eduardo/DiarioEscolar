@@ -1,7 +1,5 @@
-package com.progweb.DiarioEscolar.settings.mappers;
+package com.progweb.DiarioEscolar.mappers;
 
-
-import java.util.Optional;
 
 import com.progweb.DiarioEscolar.domain.Aluno;
 import com.progweb.DiarioEscolar.dto.AlunoDTO;
@@ -12,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AlunoMapper {
 
     @Autowired
-    private static ModelMapper modelMapper;
+    private ModelMapper modelMapper;
     
     public AlunoDTO convertToAlunoDTO(Aluno aluno) {
         AlunoDTO alunoDTO = modelMapper.map(aluno, AlunoDTO.class);

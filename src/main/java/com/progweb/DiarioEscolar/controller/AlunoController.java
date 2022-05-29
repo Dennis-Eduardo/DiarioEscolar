@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 import com.progweb.DiarioEscolar.domain.Aluno;
 import com.progweb.DiarioEscolar.dto.AlunoDTO;
 import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
+import com.progweb.DiarioEscolar.mappers.AlunoMapper;
 import com.progweb.DiarioEscolar.services.AlunoService;
-import com.progweb.DiarioEscolar.settings.mappers.AlunoMapper;
 
 import javassist.NotFoundException;
 
@@ -73,7 +73,7 @@ public class AlunoController {
 
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Deleta um aluno cadastrado.")
-	public ResponseEntity<Object> deletarAluno(@PathVariable("id") Long id){
+	public ResponseEntity<?> deletarAluno(@PathVariable("id") Long id){
 		boolean alunoExiste = alunoService.verificarSeAlunoExiste(id);
 		
 		if(!alunoExiste){

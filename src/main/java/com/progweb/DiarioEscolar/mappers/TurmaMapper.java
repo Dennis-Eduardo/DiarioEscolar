@@ -1,4 +1,4 @@
-package com.progweb.DiarioEscolar.settings.mappers;
+package com.progweb.DiarioEscolar.mappers;
 
 
 import com.progweb.DiarioEscolar.domain.Turma;
