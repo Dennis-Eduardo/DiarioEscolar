@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(username + "nao encontrado no banco de dados");
         }
-
+    
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getAuthority(), Collections.emptyList());
     }
     

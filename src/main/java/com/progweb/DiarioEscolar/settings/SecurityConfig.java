@@ -33,6 +33,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         "/configuration/security",
         "/swagger-ui.html",
         "/webjars/**"
+        
+    };
+
+
+    //rotas que precisam de autenticacao
+    private static final String[] PRIVATE_ROUTES ={
+        "/professores/**",
+        "/turmas/**",
+        "/alunos/**"
     };
 
 	@Override
@@ -49,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 		    .antMatchers(AUTH_WHITELIST).permitAll()//lista com links disponiveis para todos
+            .antMatchers(PRIVATE_ROUTES).hasAnyAuthority("USER")//lista de usuario
             .anyRequest().authenticated()
             .and().addFilter(new AuthenticationFilter(authenticationManager()))
             .addFilter(new AuthorizationFilter(authenticationManager()))

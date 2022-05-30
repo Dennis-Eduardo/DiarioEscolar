@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -23,7 +22,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     }
 
     private ApiInfo metaData() {
-        return new ApiInfoBuilder().title("Diario Escolar Restful API").description("\"Supported by Spring Boot\"")
+        return new ApiInfoBuilder().title("Controle Escolar Restful API").description("\"Supported by Spring Boot\"")
                 .version("1.0.0").license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"").build();
     }
