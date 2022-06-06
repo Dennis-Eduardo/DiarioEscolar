@@ -14,6 +14,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import io.swagger.models.HttpMethod;
+
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -57,8 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin(); 
 
         http.authorizeRequests()
-		    .antMatchers(AUTH_WHITELIST).permitAll()//lista com links disponiveis para todos
-            .antMatchers(PRIVATE_ROUTES).hasAnyAuthority("USER")//lista de usuario
+            .antMatchers(PRIVATE_ROUTES).hasAnyAuthority("USER")//lista rotas com autorizacao
+            .antMatchers(AUTH_WHITELIST).permitAll()
             .anyRequest().authenticated()
             .and().addFilter(new AuthenticationFilter(authenticationManager()))
             .addFilter(new AuthorizationFilter(authenticationManager()))
