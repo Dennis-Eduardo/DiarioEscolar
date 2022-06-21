@@ -2,7 +2,7 @@ package com.progweb.DiarioEscolar.mappers;
 
 
 import com.progweb.DiarioEscolar.domain.User;
-import com.progweb.DiarioEscolar.dto.UserDTO;
+import com.progweb.DiarioEscolar.domain.dtos.UserDTO;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

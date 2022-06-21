@@ -14,7 +14,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import io.swagger.models.HttpMethod;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -54,14 +53,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic();
-        // acesso ao Banco de Dados em memória (H2)
         http.cors().and().csrf().disable();
         http.headers().frameOptions().sameOrigin(); 
 
+        
         http.authorizeRequests()
-            .antMatchers(PRIVATE_ROUTES).hasAnyAuthority("USER")//lista rotas com autorizacao
+           // .antMatchers(PRIVATE_ROUTES).hasAnyAuthority("USER")//lista rotas com autorizacao
             .antMatchers(AUTH_WHITELIST).permitAll()
-            .anyRequest().authenticated()
+          //  .anyRequest().authenticated()
             .and().addFilter(new AuthenticationFilter(authenticationManager()))
             .addFilter(new AuthorizationFilter(authenticationManager()))
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

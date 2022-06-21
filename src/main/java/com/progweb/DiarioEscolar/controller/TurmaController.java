@@ -21,12 +21,11 @@ import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 
 import com.progweb.DiarioEscolar.domain.Turma;
-
-import com.progweb.DiarioEscolar.dto.TurmaDTO;
-import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
+import com.progweb.DiarioEscolar.domain.dtos.TurmaDTO;
 import com.progweb.DiarioEscolar.mappers.TurmaMapper;
 
 import com.progweb.DiarioEscolar.services.TurmaService;
+import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
 
 @RestController
 @RequestMapping(value = "/turmas")
@@ -34,9 +33,8 @@ import com.progweb.DiarioEscolar.services.TurmaService;
 public class TurmaController {
 	
 	@Autowired
-	private TurmaService turmaService;
-
-
+	private TurmaService service;
+	
 	@Autowired
     private TurmaMapper turmaMapper;
 	
@@ -44,7 +42,7 @@ public class TurmaController {
 	@GetMapping()
 	@ApiOperation(value = "Retorna a lista de todas as turmas cadastrados.")
 	public List<TurmaDTO> listarTurmas() {
-        List<Turma> turmas = turmaService.ListarTurmas();
+        List<Turma> turmas = service.ListarTurmas();
         return turmas.stream()
                         .map(turmaMapper::convertToTurmaDTO)
                         .collect(Collectors.toList());
@@ -55,7 +53,7 @@ public class TurmaController {
 	public ResponseEntity<?> registrarTurma(@RequestBody TurmaDTO turmaDTO) {
         try {
             Turma turma = turmaMapper.convertFromTurmaDTO(turmaDTO);
-            return new ResponseEntity<>(turmaService.adicionarTurma(turma), HttpStatus.CREATED);
+            return new ResponseEntity<>(service.adicionarTurma(turma), HttpStatus.CREATED);
         } catch (ExistingObjectSameNameException e) {
 			return ResponseEntity.badRequest().body("Nome da turma ja Registrada");
         }
@@ -64,29 +62,23 @@ public class TurmaController {
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Retorna uma turma pelo seu {id}.")
 	public ResponseEntity<?> buscarTurma(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<>(turmaMapper.convertToTurmaDTO(turmaService.buscarTurma(id)), HttpStatus.OK);
-        } catch (NotFoundException e) {
-            return ResponseEntity.badRequest().body("Turma nao encontrada");
-        }
+
+        return new ResponseEntity<>(turmaMapper.convertToTurmaDTO(service.encontrarPorID(id)), HttpStatus.OK);
+        
     }
 
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualiza os dados de uma turma.")
 	public TurmaDTO atualizarTurma(@PathVariable("id") Long id, @RequestBody TurmaDTO turmaDTO) {
         Turma turma = turmaMapper.convertFromTurmaDTO(turmaDTO);
-        return turmaMapper.convertToTurmaDTO(turmaService.atualizarTurma(turma));
+        return turmaMapper.convertToTurmaDTO(service.atualizarTurma(id, turma));
     }
 
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "Deleta uma turma Cadastrado.")
 	public ResponseEntity<Object> deletarTurma(@PathVariable("id") Long id){
-		boolean turmaExiste = turmaService.verificarSeTurmaExiste(id);
-		
-		if(!turmaExiste){
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Turma não encontrada");
-		}
-		turmaService.deletarTurma(id);
+
+		service.deletarTurma(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Turma Deletada com sucesso");
 
 	}
@@ -95,18 +87,17 @@ public class TurmaController {
 	
 	@PatchMapping("/{idTurma}/matricularAluno/{idAluno}")
 	@ApiOperation(value = "Matricular um aluno a uma turma.")
-    public TurmaDTO matricularAluno(@PathVariable("idTurma") Long idTurma,@PathVariable("idAluno") Long idAluno, @RequestBody TurmaDTO turmaDTO) throws ExistingObjectSameNameException, NotFoundException{
+    public TurmaDTO matricularAluno(@PathVariable("idTurma") Long idTurma,@PathVariable("idAluno") Long idAluno) throws ExistingObjectSameNameException, NotFoundException{
 
-        return turmaMapper.convertToTurmaDTO(turmaService.matricularAluno(idTurma, idAluno));
+        return turmaMapper.convertToTurmaDTO(service.matricularAluno(idTurma, idAluno));
 
     }
 
 
 	@PatchMapping("/{idTurma}/vincularProfessor/{idProf}")
 	@ApiOperation(value = "Vincula um Professor a uma turma.")
-    public TurmaDTO vincularProfessor(@PathVariable("idTurma") Long idTurma,@PathVariable("idProf") Long idProf, @RequestBody TurmaDTO turmaDTO) throws ExistingObjectSameNameException, NotFoundException{
-	     
-        return turmaMapper.convertToTurmaDTO(turmaService.vincularProfessor(idTurma, idProf));
+    public TurmaDTO vincularProfessor(@PathVariable("idTurma") Long idTurma,@PathVariable("idProf") Long idProf) throws ExistingObjectSameNameException, NotFoundException{
+        return turmaMapper.convertToTurmaDTO(service.vincularProfessor(idTurma, idProf));
 	
 	}
 

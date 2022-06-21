@@ -1,4 +1,4 @@
-package com.progweb.DiarioEscolar.exceptions;
+package com.progweb.DiarioEscolar.services.exceptions;
 
 
 

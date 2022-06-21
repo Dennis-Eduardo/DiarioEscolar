@@ -1,6 +1,6 @@
 package com.progweb.DiarioEscolar.controller;
 
-import com.progweb.DiarioEscolar.dto.UserDTO;
+import com.progweb.DiarioEscolar.domain.dtos.UserDTO;
 import com.progweb.DiarioEscolar.mappers.UserMapper;
 import com.progweb.DiarioEscolar.services.UserService;
 

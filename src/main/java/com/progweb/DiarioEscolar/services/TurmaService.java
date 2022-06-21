@@ -1,6 +1,7 @@
 package com.progweb.DiarioEscolar.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,14 +11,15 @@ import javassist.NotFoundException;
 import com.progweb.DiarioEscolar.domain.Aluno;
 import com.progweb.DiarioEscolar.domain.Professor;
 import com.progweb.DiarioEscolar.domain.Turma;
-import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.repositories.TurmaRepository;
+import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
+import com.progweb.DiarioEscolar.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class TurmaService {
 	
 	@Autowired
-	private TurmaRepository turmaRepository;
+	private TurmaRepository repository;
 
     @Autowired
     private ProfessorService professorService;
@@ -25,44 +27,48 @@ public class TurmaService {
 	@Autowired
     private AlunoService alunoService;
 	
-	public List<Turma> ListarTurmas (){
-		return turmaRepository.findAll();
+	public Turma encontrarPorID(Long id){
+        Optional<Turma> obj = repository.findById(id);
+        return obj.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado! id : "+ id));
+    }
+
+	public List<Turma> ListarTurmas(){
+		return repository.findAll();
 	}
 
 	public Turma adicionarTurma(Turma turma)throws ExistingObjectSameNameException{
-		if (turmaRepository.findByNome(turma.getNome()) != null)
-            throw new ExistingObjectSameNameException("Já existe um turma com esse nome!");
-		return turmaRepository.save(turma);
+		return repository.save(turma);
 	}
 
 	public Turma buscarTurma(Long turmaID) throws NotFoundException{
-		return turmaRepository.findById(turmaID).orElseThrow(() -> new NotFoundException("Não existe um turma com esse id!"));
+		return repository.findById(turmaID).orElseThrow(() -> new NotFoundException("Não existe um turma com esse id!"));
 	}
 
 	public boolean verificarSeTurmaExiste(Long turmaID){
-		return turmaRepository.existsById(turmaID);
+		return repository.existsById(turmaID);
 	}
 
-	public Turma atualizarTurma(Turma turmaRecebida){
-		Turma turma = turmaRepository.findById(turmaRecebida.getId()).get();
+	public Turma atualizarTurma(Long id, Turma turmaRecebida){
+		//pega a turma com as relacoes e so troca o nome e sala dela
+		Turma turma = encontrarPorID(id);
 
 		turma.setNome(turmaRecebida.getNome());
 		turma.setSala(turmaRecebida.getSala());
 		
-		return turmaRepository.save(turma);
+		return repository.save(turma);
 	}
 
 	public void deletarTurma(Long turmaID){
-		Turma turmaToDelete = turmaRepository.findById(turmaID).get();
-        turmaRepository.delete(turmaToDelete);
+		Turma turmaToDelete = encontrarPorID(turmaID);
+        repository.delete(turmaToDelete);
 	}
 
 
 	
     public Turma vincularProfessor(Long idTurma, Long idProf) throws ExistingObjectSameNameException, NotFoundException{
 
-        Professor professor = professorService.buscarProfessor(idProf);   
-		Turma turma = turmaRepository.findById(idTurma).get();
+        Professor professor = professorService.encontrarPorID(idProf);   
+		Turma turma = repository.findById(idTurma).get();
 
         turma.setProfessor(professor);
         professor.getTurmas().add(turma);
@@ -74,15 +80,13 @@ public class TurmaService {
 
 	public Turma matricularAluno(Long idTurma, Long idAluno) throws ExistingObjectSameNameException, NotFoundException{
 
-        Aluno aluno = alunoService.buscarAluno(idAluno);
-		Turma turma = turmaRepository.findById(idTurma).get();
+        Aluno aluno = alunoService.encontrarPorID(idAluno);
+		Turma turma = repository.findById(idTurma).get();
 
-        turma.getAlunos().add(aluno);
+       // turma.getAlunos().add(aluno);
         aluno.getTurmas().add(turma);
 
 		alunoService.adicionarAluno(aluno);
 		return this.adicionarTurma(turma);
-		
-
     }
 }

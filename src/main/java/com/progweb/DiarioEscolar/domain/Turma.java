@@ -2,6 +2,7 @@ package com.progweb.DiarioEscolar.domain;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,9 +18,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
-
-
 @Entity
 @Table(name = "turma")
 public class Turma implements Serializable{
@@ -30,17 +28,16 @@ public class Turma implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "nome")
+	@Column
 	private String nome;
-
-	@Column(name = "sala")
+	@Column
 	private String sala;
 
 
     //RELACIONAMENTOS
-    @ManyToMany(cascade = {CascadeType.PERSIST})
-    @JsonIgnore
-    private List<Aluno> alunos;
+   // @ManyToMany(cascade = {CascadeType.PERSIST})
+    //@JsonIgnore
+    //private List<Aluno> alunos = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "professor_id", referencedColumnName = "id")
@@ -48,12 +45,12 @@ public class Turma implements Serializable{
     private Professor professor;
 
 
-    public List<Aluno> getAlunos() {
-        return alunos;
-    }
+    //public List<Aluno> getAlunos() {
+       // return alunos;
+   // }
 
     public void setAlunos(List<Aluno> alunos) {
-        this.alunos = alunos;
+      // this.alunos = alunos;
     }
 
 

@@ -1,5 +1,6 @@
 package com.progweb.DiarioEscolar.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,16 +15,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javassist.NotFoundException;
 
 import com.progweb.DiarioEscolar.domain.Professor;
-import com.progweb.DiarioEscolar.dto.ProfessorDTO;
-import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
+import com.progweb.DiarioEscolar.domain.dtos.ProfessorDTO;
 import com.progweb.DiarioEscolar.mappers.ProfessorMapper;
 import com.progweb.DiarioEscolar.services.ProfessorService;
+import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
 
 @RestController
 @RequestMapping(value = "/professores")
@@ -31,58 +32,55 @@ import com.progweb.DiarioEscolar.services.ProfessorService;
 public class ProfessorController {
 	
 	@Autowired
-	private ProfessorService professorService;
+	private ProfessorService service;
 
 	@Autowired
     private ProfessorMapper professorMapper;
 	
 	@GetMapping()
 	@ApiOperation(value = "Retorna a lista de todos os professores cadastrados.")
-	public List<ProfessorDTO> listarProfessors() {
-        List<Professor> professors = professorService.ListarProfessor();
-        return professors.stream()
+	public List<ProfessorDTO> listarProfessores() {
+        List<Professor> professor = service.ListarProfessores();
+        return professor.stream()
 						.map(professorMapper::convertToProfessorDTO)
                         .collect(Collectors.toList());
     }
 	
-	@PostMapping
-	@ApiOperation(value = "Cadastra um novo professor.")
-	public ResponseEntity<?> registrarProfessor(@RequestBody ProfessorDTO professorDTO) throws ExistingObjectSameNameException{
-		try {
-            Professor professor = professorMapper.convertFromProfessorDTO(professorDTO);
-            return new ResponseEntity<>(professorService.adicionarProfessor(professor), HttpStatus.CREATED);
-
-        } catch (ExistingObjectSameNameException e) {
-            return ResponseEntity.badRequest().body("Nome do professor ja Registrado");
-        }
-	}
-
 	@GetMapping("/{id}")
-	@ApiOperation(value = "Retorna um professor pelo seu {id}.")
+	@ApiOperation(value = "Retorna um Professor pelo seu {id}.")
 	public ResponseEntity<?> buscarProfessor(@PathVariable Long id){
-		try {
-            return new ResponseEntity<>(professorMapper.convertToProfessorDTO(professorService.buscarProfessor(id)), HttpStatus.OK);
-        } catch (NotFoundException e) {
-            return ResponseEntity.badRequest().body("Professor não encontrado");
-        }
+        return new ResponseEntity<>(professorMapper.convertToProfessorDTO(service.encontrarPorID(id)), HttpStatus.OK);
+
+	}
+	
+	@PostMapping
+	@ApiOperation(value = "Cadastra um novo Professor.")
+	public ResponseEntity<ProfessorDTO> registrarProfessor(@RequestBody ProfessorDTO professorDTO) throws ExistingObjectSameNameException{
+		
+        Professor professor = professorMapper.convertFromProfessorDTO(professorDTO);
+		Professor novoProfessor=  service.adicionarProfessor(professor);
+		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novoProfessor.getId()).toUri();
+
+		return ResponseEntity.created(uri).build();
+
 	}
 
 	@PutMapping("/{id}")
-	@ApiOperation(value = "Atualiza os dados de um professor.")
-	public ProfessorDTO atualizarProfessor(@PathVariable("id") Long id, @RequestBody ProfessorDTO professorDTO){
+	@ApiOperation(value = "Atualiza os dados de um Professor.")
+	public ResponseEntity<ProfessorDTO> atualizarProfessor(@PathVariable Long id, @RequestBody ProfessorDTO professorDTO){
+		
 		Professor professor = professorMapper.convertFromProfessorDTO(professorDTO);
-        return professorMapper.convertToProfessorDTO(professorService.atualizarProfessor(id, professor));
+        ProfessorDTO professorAtualizado =  professorMapper.convertToProfessorDTO(service.atualizarProfessor(id, professor));
+
+		return ResponseEntity.ok().body(professorAtualizado);
 	}
 
 	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Deleta um professor cadastrado.")
-	public ResponseEntity<Object> deletarProfessor(@PathVariable("id") Long id){
-		boolean professorExiste = professorService.verificarSeProfessorExiste(id);
+	@ApiOperation(value = "Deleta um Professor cadastrado.")
+	public ResponseEntity<?> deletarProfessor(@PathVariable Long id){
 		
-		if(!professorExiste){
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Professor não encontrado");
-		}
-		professorService.deletarProfessor(id);
+		service.deletarProfessor(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Professor Deletado com sucesso");
 
 	}

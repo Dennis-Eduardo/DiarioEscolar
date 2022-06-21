@@ -1,49 +1,48 @@
 package com.progweb.DiarioEscolar.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javassist.NotFoundException;
 
 import com.progweb.DiarioEscolar.domain.Professor;
-import com.progweb.DiarioEscolar.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.repositories.ProfessorRepository;
+import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
+import com.progweb.DiarioEscolar.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class ProfessorService {
 	
 	@Autowired
-	private ProfessorRepository professorRepository;
+	private ProfessorRepository repository;
 	
-	public List<Professor> ListarProfessor (){
-		return professorRepository.findAll();
+	public Professor encontrarPorID(Long id){
+		Optional<Professor> obj = repository.findById(id);
+        return obj.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado! id : "+ id));
+    }
+
+	public List<Professor> ListarProfessores (){
+		return repository.findAll();
 	}
 
 	public Professor adicionarProfessor(Professor professor) throws ExistingObjectSameNameException{
-		if (professorRepository.findByNome(professor.getNome()) != null)
-            throw new ExistingObjectSameNameException("Já existe um professor com esse nome!");
-		return professorRepository.save(professor);
+		
+		return repository.save(professor);
 	}
 
-	public Professor buscarProfessor(Long professorID) throws NotFoundException{
-		return professorRepository.findById(professorID).orElseThrow(() -> new NotFoundException("Não existe um professor com esse id!"));
-	}
-
-	public boolean verificarSeProfessorExiste(Long professorID){
-		return professorRepository.existsById(professorID);
-	}
 
 	public Professor atualizarProfessor(Long id, Professor professor){
 		professor.setId(id);
 
-		return professorRepository.save(professor);
+        return repository.save(professor);
+		
 	}
-	
-	public void deletarProfessor(Long professorID){
-		Professor professorToDelete = professorRepository.findById(professorID).get();
-        professorRepository.delete(professorToDelete);
+
+	public void deletarProfessor(Long id){
+		Professor professor = encontrarPorID(id);
+        repository.deleteById(professor.getId());
 	}
 
 }
