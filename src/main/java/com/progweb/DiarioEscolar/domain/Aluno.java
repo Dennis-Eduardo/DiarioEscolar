@@ -5,42 +5,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "aluno")
 public class Aluno extends Pessoa{
 	private static final long serialVersionUID = 1L;
 
+	@Column
+	private String papelProjeto;
+
 	// RELACIONAMENTO
 	@JsonIgnore
 	@ManyToMany(cascade = {CascadeType.PERSIST})
-    @JoinTable(name = "aluno_turma", joinColumns = @JoinColumn(name = "aluno_id"), inverseJoinColumns = @JoinColumn(name = "turma_id"))
+    @JoinTable(name = "aluno_turma",
+	 joinColumns = @JoinColumn(name = "aluno_id", referencedColumnName = "id"),
+	inverseJoinColumns = @JoinColumn(name = "turma_id", referencedColumnName = "id"))
 	private List<Turma> turmas = new ArrayList<>();
 
-	public Aluno(Long id, String nome, String matricula, String email) {
-		super(id, nome, matricula, email);
-	}
 
-	public Aluno() {
-	}
-
-	public List<Turma> getTurmas() {
-		return turmas;
-	}
-
-	public void setTurmas(List<Turma> turmas) {
-		this.turmas = turmas;
-	}
-
-	
-
-	
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "projeto_id", referencedColumnName = "id")
+	private Projeto projeto;
 
 }

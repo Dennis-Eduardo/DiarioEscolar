@@ -53,6 +53,7 @@ public class ProfessorController {
 
 	}
 	
+	
 	@PostMapping
 	@ApiOperation(value = "Cadastra um novo Professor.")
 	public ResponseEntity<ProfessorDTO> registrarProfessor(@RequestBody ProfessorDTO professorDTO) throws ExistingObjectSameNameException{

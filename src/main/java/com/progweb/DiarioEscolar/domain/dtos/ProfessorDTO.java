@@ -1,5 +1,15 @@
 package com.progweb.DiarioEscolar.domain.dtos;
 
+import java.util.List;
+
+import com.progweb.DiarioEscolar.domain.Projeto;
+import com.progweb.DiarioEscolar.domain.Turma;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class ProfessorDTO {
     
     private Long id;
@@ -7,51 +17,9 @@ public class ProfessorDTO {
     private String formacao;
     private String matricula;
     private String email;
-    
-    public ProfessorDTO() {
-    }
 
-    public ProfessorDTO(Long id, String nome, String formacao, String matricula, String email) {
-        this.id = id;
-        this.nome = nome;
-        this.formacao = formacao;
-        this.matricula = matricula;
-        this.email = email;
-    }
-    
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    public String getFormacao() {
-        return formacao;
-    }
-    public void setFormacao(String formacao) {
-        this.formacao = formacao;
-    }
-    public String getMatricula() {
-        return matricula;
-    }
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    private List<Turma> turmas;
+	private Projeto projeto;
 
 
 }

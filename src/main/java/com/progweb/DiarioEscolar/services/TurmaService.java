@@ -65,7 +65,7 @@ public class TurmaService {
 
 
 	
-    public Turma vincularProfessor(Long idTurma, Long idProf) throws ExistingObjectSameNameException, NotFoundException{
+    public Turma vincularProfessor(Long idTurma, Long idProf){
 
         Professor professor = professorService.encontrarPorID(idProf);   
 		Turma turma = repository.findById(idTurma).get();
@@ -74,19 +74,19 @@ public class TurmaService {
         professor.getTurmas().add(turma);
 
         
-        professorService.adicionarProfessor(professor);
-        return this.adicionarTurma(turma);
+        professorService.atualizarProfessor(idProf, professor);
+        return this.atualizarTurma(idTurma, turma);
     }
 
-	public Turma matricularAluno(Long idTurma, Long idAluno) throws ExistingObjectSameNameException, NotFoundException{
+	public Turma matricularAluno(Long idTurma, Long idAluno){
 
         Aluno aluno = alunoService.encontrarPorID(idAluno);
 		Turma turma = repository.findById(idTurma).get();
 
-       // turma.getAlunos().add(aluno);
-        aluno.getTurmas().add(turma);
+       	turma.getAlunos().add(aluno);
+    	aluno.getTurmas().add(turma);
 
-		alunoService.adicionarAluno(aluno);
-		return this.adicionarTurma(turma);
+		alunoService.atualizarAluno(idAluno, aluno);
+		return this.atualizarTurma(idTurma, turma);
     }
 }

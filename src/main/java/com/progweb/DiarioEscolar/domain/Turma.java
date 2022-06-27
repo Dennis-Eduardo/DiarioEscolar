@@ -18,6 +18,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "turma")
 public class Turma implements Serializable{
@@ -33,59 +38,14 @@ public class Turma implements Serializable{
 	@Column
 	private String sala;
 
-
     //RELACIONAMENTOS
-   // @ManyToMany(cascade = {CascadeType.PERSIST})
-    //@JsonIgnore
-    //private List<Aluno> alunos = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @JsonIgnore
+    private List<Aluno> alunos = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "professor_id", referencedColumnName = "id")
-    @JsonIgnore
     private Professor professor;
 
-
-    //public List<Aluno> getAlunos() {
-       // return alunos;
-   // }
-
-    public void setAlunos(List<Aluno> alunos) {
-      // this.alunos = alunos;
-    }
-
-
-
-    public Professor getProfessor() {
-        return professor;
-    }
-
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSala() {
-        return sala;
-    }
-
-    public void setSala(String sala) {
-        this.sala = sala;
-    }
-	
 
 }
