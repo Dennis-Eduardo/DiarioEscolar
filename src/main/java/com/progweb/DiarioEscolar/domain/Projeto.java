@@ -40,7 +40,7 @@ public class Projeto implements Serializable {
     @JsonIgnore
     @OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id")
-    private Professor professor;
+    private Professor professor;//trocar para coordenador
 
     @JsonIgnore
     @OneToMany(mappedBy = "projeto", fetch = FetchType.EAGER)

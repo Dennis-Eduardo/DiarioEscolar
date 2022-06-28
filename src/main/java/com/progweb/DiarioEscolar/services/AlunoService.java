@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.progweb.DiarioEscolar.domain.Aluno;
+import com.progweb.DiarioEscolar.domain.enums.Authority;
 import com.progweb.DiarioEscolar.repositories.AlunoRepository;
 import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.services.exceptions.ObjectNotFoundException;
@@ -29,6 +30,7 @@ public class AlunoService {
 
 	public Aluno adicionarAluno(Aluno aluno) throws ExistingObjectSameNameException{
 		
+		aluno.addAuthority(Authority.ALUNO);
 		return repository.save(aluno);
 	}
 

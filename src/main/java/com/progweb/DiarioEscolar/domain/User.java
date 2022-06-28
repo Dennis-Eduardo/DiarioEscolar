@@ -2,91 +2,74 @@ package com.progweb.DiarioEscolar.domain;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.progweb.DiarioEscolar.domain.enums.Authority;
 
-@Data
-@Entity
-@Builder
-@Table(name = "users")
-@AllArgsConstructor
-@NoArgsConstructor
-public class User implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class User implements UserDetails{
+    private static final long serialVerionUID = 1L;
+
     private Long id;
-    @Column(unique = true, nullable = false)
-    private String username;
-    @Column(unique = true, nullable = false)
+    private String userName;
     private String password;
-    private String authority;
+    private Collection<? extends GrantedAuthority> Authorities;
 
-   
 
+    public Long getId(){
+        return id;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> this.authority);
+        return null;
     }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    //conta nao esta expirada?
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    //conta nao esta fechada?
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    //as credencias nao estao expiradas?
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    //esta habilitado?
     @Override
     public boolean isEnabled() {
         return true;
     }
-
-    @Override
-    public String getPassword() {
-        
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        
-        return null;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
+    public User(Long id, String userName, String password, Set<Authority> authority) {
+        this.id = id;
+        this.userName = userName;
         this.password = password;
+        Authorities = authority.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toSet());
     }
 
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
+    
+    
 }

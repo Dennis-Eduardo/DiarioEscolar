@@ -45,6 +45,7 @@ public class Turma implements Serializable{
     private List<Aluno> alunos = new ArrayList<>();
 
     @ManyToOne
+	@JsonIgnore
     @JoinColumn(name = "professorTurma_id", referencedColumnName = "id")
     private Professor professor;
 	

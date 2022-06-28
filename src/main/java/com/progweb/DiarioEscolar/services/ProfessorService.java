@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 import com.progweb.DiarioEscolar.domain.Professor;
+import com.progweb.DiarioEscolar.domain.enums.Authority;
 import com.progweb.DiarioEscolar.repositories.ProfessorRepository;
 import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.services.exceptions.ObjectNotFoundException;
@@ -29,13 +30,13 @@ public class ProfessorService {
 
 	public Professor adicionarProfessor(Professor professor) throws ExistingObjectSameNameException{
 		
+		professor.addAuthority(Authority.PROF);
 		return repository.save(professor);
 	}
 
 
 	public Professor atualizarProfessor(Long id, Professor professor){
 		professor.setId(id);
-
         return repository.save(professor);
 		
 	}

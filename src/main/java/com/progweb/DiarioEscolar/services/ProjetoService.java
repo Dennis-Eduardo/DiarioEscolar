@@ -65,12 +65,14 @@ public class ProjetoService {
 
 	public Projeto adicionarAluno(Long idProjeto, Long idAluno){
 
+		//lancar um erro que o projeto deve possuir um professor
         Aluno aluno = alunoService.encontrarPorID(idAluno);
 		Projeto projeto = this.encontrarPorID(idProjeto);
 
 
 		projeto.addAluno(aluno);
 		aluno.setProjeto(projeto);
+		
 
 		alunoService.atualizarAluno(idAluno,aluno);
 		return this.atualizarProjeto(idProjeto, projeto);

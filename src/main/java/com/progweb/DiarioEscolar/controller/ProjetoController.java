@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -53,7 +54,7 @@ public class ProjetoController {
         return new ResponseEntity<>(projetoMapper.convertToProjetoDTO(service.encontrarPorID(id)), HttpStatus.OK);
 
 	}
-	
+	@PreAuthorize("hasAnyRole('PROF')")
 	@PostMapping
 	@ApiOperation(value = "Cadastra um novo projeto.")
 	public ResponseEntity<ProjetoDTO> registrarProjeto(@RequestBody ProjetoDTO projetoDTO) throws ExistingObjectSameNameException{
@@ -67,6 +68,7 @@ public class ProjetoController {
 
 	}
 
+	@PreAuthorize("hasAnyRole('PROF')")
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualiza os dados de um projeto.")
 	public ResponseEntity<ProjetoDTO> atualizarProjeto(@PathVariable Long id, @RequestBody ProjetoDTO projetoDTO){
@@ -86,6 +88,7 @@ public class ProjetoController {
 
 	}
 
+	@PreAuthorize("hasAnyRole('PROF')")
 	@PatchMapping("/{idProjeto}/adicionarAluno/{idAluno}")
 	@ApiOperation(value = "Adicionar um Aluno ao Projeto.")
     public ProjetoDTO adicionarAluno(@PathVariable("idProjeto") Long idProjeto,@PathVariable("idAluno") Long idAluno){

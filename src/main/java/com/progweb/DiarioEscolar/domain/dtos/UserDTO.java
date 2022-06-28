@@ -1,11 +1,10 @@
 package com.progweb.DiarioEscolar.domain.dtos;
 
 
-public class UserDTO {
+public class UserDTO{
     
     private String username;
     private String password;
-    private String authority;
 
     public String getUsername() {
         return username;
@@ -19,12 +18,7 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getAuthority() {
-        return authority;
-    }
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
+
 
     
 

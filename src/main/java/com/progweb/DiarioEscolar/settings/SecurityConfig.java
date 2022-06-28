@@ -1,6 +1,8 @@
 package com.progweb.DiarioEscolar.settings;
 
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.progweb.DiarioEscolar.settings.security.AuthenticationFilter;
+import com.progweb.DiarioEscolar.settings.security.AuthorizationFilter;
+import com.progweb.DiarioEscolar.settings.security.JWTUtil;
+
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -22,9 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserDetailsService userDetailsService;
-	
+	@Autowired
+    private JWTUtil jwtUtil;
+    
     //rotas que nao precisam de autenticacao
-	private static final String[] AUTH_WHITELIST = {
+	private static final String[] PUBLIC_ROUTES = {
         "/v2/api-docs",
         "/signup",
         "/h2-console/**",
@@ -52,24 +60,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
+        //configuracao cors
         http.httpBasic();
         http.cors().and().csrf().disable();
         http.headers().frameOptions().sameOrigin(); 
 
+        //filtros
+
+        http.addFilter(new AuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new AuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         
+
+        //requisicoes
         http.authorizeRequests()
-           // .antMatchers(PRIVATE_ROUTES).hasAnyAuthority("USER")//lista rotas com autorizacao
-            .antMatchers(AUTH_WHITELIST).permitAll()
-          //  .anyRequest().authenticated()
-            .and().addFilter(new AuthenticationFilter(authenticationManager()))
-            .addFilter(new AuthorizationFilter(authenticationManager()))
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .antMatchers( PUBLIC_ROUTES).permitAll()
+            .anyRequest().authenticated();
+            
+
+        //configuracao nao criar secao so usuario
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 	
 	@Bean
     CorsConfigurationSource corsConfigurationSource() {
+        //adicionar as permisoes do cors e umas amais dos methods post, get...
+        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        configuration.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE","OPTIONS", "PATCH"));
+
+        //aadicionar para todas as requisicoes em todos os url /** */
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",new CorsConfiguration().applyPermitDefaultValues());
         return source;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }

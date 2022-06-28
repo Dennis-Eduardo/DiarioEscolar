@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DiarioEscolarApplication {
 
 	public static void main(String[] args) {
+		///iniciar um aluno e professor padrao
 		SpringApplication.run(DiarioEscolarApplication.class, args);
 	}
 
