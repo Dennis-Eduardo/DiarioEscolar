@@ -27,6 +27,7 @@ public class ProjetoService {
 	
 	public Projeto encontrarPorID(Long id){
 		Optional<Projeto> obj = repository.findById(id);
+		System.out.println(obj);
         return obj.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado! id : "+ id));
     }
 
@@ -53,7 +54,7 @@ public class ProjetoService {
 	public Projeto vincularProfessor(Long idProjeto, Long idProf){
 
         Professor professor = professorService.encontrarPorID(idProf); 
-		Projeto projeto= repository.findById(idProjeto).get();
+		Projeto projeto= this.encontrarPorID(idProjeto);
 
 		projeto.setProfessor(professor);
 		professor.setProjeto(projeto);
@@ -62,17 +63,17 @@ public class ProjetoService {
         return this.atualizarProjeto(idProjeto, projeto);
     }
 
-	public Projeto adicionarAluno(Long idProf, Long idAluno){
+	public Projeto adicionarAluno(Long idProjeto, Long idAluno){
 
         Aluno aluno = alunoService.encontrarPorID(idAluno);
-		Projeto projeto = professorService.encontrarPorID(idProf).getProjeto();
+		Projeto projeto = this.encontrarPorID(idProjeto);
 
 
-		projeto.getAlunos().add(aluno);
+		projeto.addAluno(aluno);
 		aluno.setProjeto(projeto);
 
-		alunoService.atualizarAluno(aluno.getId(),aluno);
-		return this.atualizarProjeto(projeto.getId(), projeto);
+		alunoService.atualizarAluno(idAluno,aluno);
+		return this.atualizarProjeto(idProjeto, projeto);
     }
 
 

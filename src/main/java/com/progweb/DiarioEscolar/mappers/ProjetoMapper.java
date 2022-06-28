@@ -2,10 +2,12 @@ package com.progweb.DiarioEscolar.mappers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.progweb.DiarioEscolar.domain.Projeto;
 import com.progweb.DiarioEscolar.domain.dtos.ProjetoDTO;
 
+@Component
 public class ProjetoMapper {
 	
 	   @Autowired

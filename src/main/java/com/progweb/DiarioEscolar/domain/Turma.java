@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,13 +40,16 @@ public class Turma implements Serializable{
 	private String sala;
 
     //RELACIONAMENTOS
-    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Aluno> alunos = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "professor_id", referencedColumnName = "id")
+    @JoinColumn(name = "professorTurma_id", referencedColumnName = "id")
     private Professor professor;
-
+	
+	public void addAluno(Aluno aluno){
+		this.alunos.add(aluno);
+	}
 
 }

@@ -35,15 +35,20 @@ public class Projeto implements Serializable {
     @Column
     private String nome;
     @Column
-    private String descrição;
+    private String descricao;
 
-    @OneToOne(cascade = {CascadeType.DETACH})
+    @JsonIgnore
+    @OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "professor_id")
     private Professor professor;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "projeto", fetch = FetchType.LAZY, cascade = {CascadeType.DETACH})
+    @OneToMany(mappedBy = "projeto", fetch = FetchType.EAGER)
     private List<Aluno> alunos = new ArrayList<>();
+
+    public void addAluno(Aluno aluno){
+		this.alunos.add(aluno);
+	}
 }
 
 

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -30,15 +31,21 @@ public class Aluno extends Pessoa{
 
 	// RELACIONAMENTO
 	@JsonIgnore
-	@ManyToMany(cascade = {CascadeType.PERSIST})
+	@ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)
     @JoinTable(name = "aluno_turma",
 	 joinColumns = @JoinColumn(name = "aluno_id", referencedColumnName = "id"),
 	inverseJoinColumns = @JoinColumn(name = "turma_id", referencedColumnName = "id"))
 	private List<Turma> turmas = new ArrayList<>();
 
 
-	@ManyToOne(optional = true)
+	@JsonIgnore
+	@ManyToOne
 	@JoinColumn(name = "projeto_id", referencedColumnName = "id")
 	private Projeto projeto;
+
+
+	public void addTurma(Turma turma){
+		this.turmas.add(turma);
+	}
 
 }

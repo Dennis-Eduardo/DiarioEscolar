@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -83,6 +84,22 @@ public class ProjetoController {
 		service.deletarProjeto(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Projeto Deletado com sucesso");
 
+	}
+
+	@PatchMapping("/{idProjeto}/adicionarAluno/{idAluno}")
+	@ApiOperation(value = "Adicionar um Aluno ao Projeto.")
+    public ProjetoDTO adicionarAluno(@PathVariable("idProjeto") Long idProjeto,@PathVariable("idAluno") Long idAluno){
+
+        return projetoMapper.convertToProjetoDTO(service.adicionarAluno(idProjeto, idAluno));
+
+    }
+
+
+	@PatchMapping("/{idProjeto}/vincularProfessor/{idProf}")
+	@ApiOperation(value = "Vincular um Professor a um Projeto.")
+    public ProjetoDTO vincularProfessor(@PathVariable("idProjeto") Long idProjeto,@PathVariable("idProf") Long idProf){
+        return projetoMapper.convertToProjetoDTO(service.vincularProfessor(idProjeto, idProf));
+	
 	}
 
 }

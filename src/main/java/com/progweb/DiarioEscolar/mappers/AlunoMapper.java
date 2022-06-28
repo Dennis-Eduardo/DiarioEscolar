@@ -15,12 +15,15 @@ public class AlunoMapper {
     public AlunoDTO convertToAlunoDTO(Aluno aluno) {
         AlunoDTO alunoDTO = modelMapper.map(aluno, AlunoDTO.class);
 
+        alunoDTO.setTurmas(aluno.getTurmas());
         return alunoDTO;
     }
 
     public Aluno convertFromAlunoDTO(AlunoDTO alunoDTO) {
         Aluno aluno = modelMapper.map(alunoDTO, Aluno.class);
-    
+        
+        aluno.setTurmas(alunoDTO.getTurmas());
         return aluno;
     }
+    
 }

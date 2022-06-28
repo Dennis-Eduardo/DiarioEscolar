@@ -68,10 +68,10 @@ public class TurmaService {
     public Turma vincularProfessor(Long idTurma, Long idProf){
 
         Professor professor = professorService.encontrarPorID(idProf);   
-		Turma turma = repository.findById(idTurma).get();
+		Turma turma = this.encontrarPorID(idTurma);
 
         turma.setProfessor(professor);
-        professor.getTurmas().add(turma);
+        professor.addTurma(turma);
 
         
         professorService.atualizarProfessor(idProf, professor);
@@ -81,10 +81,10 @@ public class TurmaService {
 	public Turma matricularAluno(Long idTurma, Long idAluno){
 
         Aluno aluno = alunoService.encontrarPorID(idAluno);
-		Turma turma = repository.findById(idTurma).get();
+		Turma turma = this.encontrarPorID(idTurma);
 
-       	turma.getAlunos().add(aluno);
-    	aluno.getTurmas().add(turma);
+       	turma.addAluno(aluno);
+    	aluno.addTurma(turma);
 
 		alunoService.atualizarAluno(idAluno, aluno);
 		return this.atualizarTurma(idTurma, turma);
