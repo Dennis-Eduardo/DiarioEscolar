@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -38,7 +39,7 @@ public class TurmaController {
 	@Autowired
     private TurmaMapper turmaMapper;
 	
-	
+	@PreAuthorize("hasAnyRole('PROF')")
 	@GetMapping()
 	@ApiOperation(value = "Retorna a lista de todas as turmas cadastrados.")
 	public List<TurmaDTO> listarTurmas() {
@@ -84,7 +85,7 @@ public class TurmaController {
 	}
 
     //PATCH
-	
+	@PreAuthorize("hasAnyRole('PROF')")
 	@PatchMapping("/{idTurma}/matricularAluno/{idAluno}")
 	@ApiOperation(value = "Matricular um aluno a uma turma.")
     public TurmaDTO matricularAluno(@PathVariable("idTurma") Long idTurma,@PathVariable("idAluno") Long idAluno) throws ExistingObjectSameNameException, NotFoundException{
@@ -93,7 +94,7 @@ public class TurmaController {
 
     }
 
-
+	@PreAuthorize("hasAnyRole('PROF')")
 	@PatchMapping("/{idTurma}/vincularProfessor/{idProf}")
 	@ApiOperation(value = "Vincula um Professor a uma turma.")
     public TurmaDTO vincularProfessor(@PathVariable("idTurma") Long idTurma,@PathVariable("idProf") Long idProf) throws ExistingObjectSameNameException, NotFoundException{

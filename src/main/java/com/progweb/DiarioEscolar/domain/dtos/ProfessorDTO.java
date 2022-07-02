@@ -17,6 +17,7 @@ public class ProfessorDTO {
     private String formacao;
     private String matricula;
     private String email;
+    private String senha;
 
     private List<Turma> turmas;
 	private Projeto projeto;

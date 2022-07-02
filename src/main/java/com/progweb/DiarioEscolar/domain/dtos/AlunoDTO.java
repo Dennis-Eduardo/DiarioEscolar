@@ -16,6 +16,7 @@ public class AlunoDTO {
     private String nome;
     private String matricula;
     private String email;
+    private String senha;
     private String papelProjeto;
     private List<Turma> turmas;
     private Projeto projeto;

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -40,15 +41,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         "/configuration/security",
         "/swagger-ui.html",
         "/webjars/**",
-        "/login"
-        
+        "/login",
+        "/alunos/**",
+        "/professores/**",
+        "/turmas/**",
+        "/projetos/**"
     };
 
 
+    //configuracao da criptografia das senhas
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
+
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -58,24 +64,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().sameOrigin(); 
 
         //filtros
-
         http.addFilter(new AuthenticationFilter(authenticationManager(), jwtUtil));
         http.addFilter(new AuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         
-
         //requisicoes
         http.authorizeRequests()
+            .antMatchers(HttpMethod.PATCH, "/turmas/**").hasAnyRole("PROF")
+            .antMatchers(HttpMethod.PATCH, "/projetos/**").hasAnyRole("PROF")
             .antMatchers( PUBLIC_ROUTES).permitAll()
             .anyRequest().authenticated();
             
-
         //configuracao nao criar secao so usuario
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 	
 	@Bean
     CorsConfigurationSource corsConfigurationSource() {
-        //adicionar as permisoes do cors e umas amais dos methods post, get...
+        //adicionar as permisoes do cors e umas a mais dos methods post, get...
         CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
         configuration.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE","OPTIONS", "PATCH"));
 

@@ -38,10 +38,10 @@ public class Aluno extends Pessoa{
 	private List<Turma> turmas = new ArrayList<>();
 
 
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "projeto_id", referencedColumnName = "id")
-	private Projeto projeto;
+	@JsonIgnore
+    @JoinColumn(name = "projeto_id", referencedColumnName = "id")
+    private Projeto projeto;
 
 
 	public void addTurma(Turma turma){

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.progweb.DiarioEscolar.domain.Projeto;
 import com.progweb.DiarioEscolar.domain.dtos.ProjetoDTO;
+import com.progweb.DiarioEscolar.domain.dtos.PapelAlunoDTO;
 import com.progweb.DiarioEscolar.mappers.ProjetoMapper;
 import com.progweb.DiarioEscolar.services.ProjetoService;
 import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
@@ -91,16 +92,17 @@ public class ProjetoController {
 	@PreAuthorize("hasAnyRole('PROF')")
 	@PatchMapping("/{idProjeto}/adicionarAluno/{idAluno}")
 	@ApiOperation(value = "Adicionar um Aluno ao Projeto.")
-    public ProjetoDTO adicionarAluno(@PathVariable("idProjeto") Long idProjeto,@PathVariable("idAluno") Long idAluno){
+    public ProjetoDTO adicionarAluno(@PathVariable("idProjeto") Long idProjeto,@PathVariable("idAluno") Long idAluno, @RequestBody PapelAlunoDTO papelAlunoDTO) throws ExistingObjectSameNameException{
 
-        return projetoMapper.convertToProjetoDTO(service.adicionarAluno(idProjeto, idAluno));
+        return projetoMapper.convertToProjetoDTO(service.adicionarAluno(idProjeto, idAluno, papelAlunoDTO));
 
     }
 
 
+	@PreAuthorize("hasAnyRole('PROF')")
 	@PatchMapping("/{idProjeto}/vincularProfessor/{idProf}")
 	@ApiOperation(value = "Vincular um Professor a um Projeto.")
-    public ProjetoDTO vincularProfessor(@PathVariable("idProjeto") Long idProjeto,@PathVariable("idProf") Long idProf){
+    public ProjetoDTO vincularProfessor(@PathVariable("idProjeto") Long idProjeto,@PathVariable("idProf") Long idProf) throws ExistingObjectSameNameException{
         return projetoMapper.convertToProjetoDTO(service.vincularProfessor(idProjeto, idProf));
 	
 	}

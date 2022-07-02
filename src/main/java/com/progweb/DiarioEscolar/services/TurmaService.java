@@ -1,5 +1,6 @@
 package com.progweb.DiarioEscolar.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,8 +66,9 @@ public class TurmaService {
 
 
 	
-    public Turma vincularProfessor(Long idTurma, Long idProf){
+    public Turma vincularProfessor(Long idTurma, Long idProf) throws ExistingObjectSameNameException{
 
+		//trans para dto
         Professor professor = professorService.encontrarPorID(idProf);   
 		Turma turma = this.encontrarPorID(idTurma);
 
@@ -74,19 +76,22 @@ public class TurmaService {
         professor.addTurma(turma);
 
         
-        professorService.atualizarProfessor(idProf, professor);
-        return this.atualizarTurma(idTurma, turma);
+        professorService.adicionarProfessor(professor);
+        return adicionarTurma(turma);
     }
 
-	public Turma matricularAluno(Long idTurma, Long idAluno){
+	public Turma matricularAluno(Long idTurma, Long idAluno) throws ExistingObjectSameNameException{
 
         Aluno aluno = alunoService.encontrarPorID(idAluno);
 		Turma turma = this.encontrarPorID(idTurma);
 
-       	turma.addAluno(aluno);
+		List<Aluno> novaLista = turma.getAlunos();
+		novaLista.add(aluno);
+
+		turma.setAlunos(novaLista);
     	aluno.addTurma(turma);
 
 		alunoService.atualizarAluno(idAluno, aluno);
-		return this.atualizarTurma(idTurma, turma);
+		return adicionarTurma(turma);
     }
 }

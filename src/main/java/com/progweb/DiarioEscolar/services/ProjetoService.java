@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.progweb.DiarioEscolar.domain.Aluno;
 import com.progweb.DiarioEscolar.domain.Professor;
 import com.progweb.DiarioEscolar.domain.Projeto;
-
+import com.progweb.DiarioEscolar.domain.dtos.PapelAlunoDTO;
 import com.progweb.DiarioEscolar.repositories.ProjetoRepository;
 import com.progweb.DiarioEscolar.services.exceptions.ExistingObjectSameNameException;
 import com.progweb.DiarioEscolar.services.exceptions.ObjectNotFoundException;
@@ -50,31 +50,38 @@ public class ProjetoService {
 		repository.deleteById(projeto.getId());
 	}
 
-	public Projeto vincularProfessor(Long idProjeto, Long idProf){
+	public Projeto vincularProfessor(Long idProjeto, Long idProf) throws ExistingObjectSameNameException{
 
         Professor professor = professorService.encontrarPorID(idProf); 
 		Projeto projeto= this.encontrarPorID(idProjeto);
 
+		
 		projeto.setProfessor(professor);
 		professor.setProjeto(projeto);
 
         professorService.atualizarProfessor(idProf, professor);
-        return this.atualizarProjeto(idProjeto, projeto);
+        return  adicionarProjeto(projeto);
     }
 
-	public Projeto adicionarAluno(Long idProjeto, Long idAluno){
+	public Projeto adicionarAluno(Long idProjeto, Long idAluno, PapelAlunoDTO papelAlunoDTO) throws ExistingObjectSameNameException{
 
-		//lancar um erro que o projeto deve possuir um professor
         Aluno aluno = alunoService.encontrarPorID(idAluno);
+		aluno.setPapelProjeto(papelAlunoDTO.getPapelAluno());
+
 		Projeto projeto = this.encontrarPorID(idProjeto);
+		if(projeto.getProfessor()==null){
+			throw new ObjectNotFoundException("Professor ainda nao cadastrado");
+		}
 
+		List<Aluno> novaLista = projeto.getAlunos();
+		novaLista.add(aluno);
 
-		projeto.addAluno(aluno);
+		projeto.setAlunos(novaLista);
 		aluno.setProjeto(projeto);
 		
 
-		alunoService.atualizarAluno(idAluno,aluno);
-		return this.atualizarProjeto(idProjeto, projeto);
+		alunoService.atualizarAluno(idAluno, aluno);
+		return adicionarProjeto(projeto);
     }
 
 

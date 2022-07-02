@@ -18,6 +18,7 @@ public class JWTUtil {
     @Value("${jwt.secret}")
     private String secret;
 
+    //criar o totem com nome+data+segredo e gera o token  = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImF5bGFuQGJvc2Nhcmluby5
     public String generateToken(String username){
         return Jwts.builder()
                     .setSubject(username)//gerar o token a apartir da informacao do username
@@ -25,8 +26,9 @@ public class JWTUtil {
                     .signWith(SignatureAlgorithm.HS256, secret.getBytes())//tipo do algoritmo para fazer o hash e o secredo
                     .compact();
     }
-    //final gerar o filtro de autorizacao
 
+
+  //fazer a verificacao do token criado com o token recebido
     public boolean tokenValido(String token) {
         Claims claims = getClaims(token);
         if(claims != null){

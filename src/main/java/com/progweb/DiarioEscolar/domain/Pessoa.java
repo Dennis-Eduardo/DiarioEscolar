@@ -1,6 +1,7 @@
 package com.progweb.DiarioEscolar.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,13 +45,13 @@ public abstract class Pessoa implements Serializable {
 
 	@ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "AUTHORITY")
-	protected Set<Integer> authority;
+	protected Set<Integer> authority= new HashSet<>();
 
 	public Set<Authority> getAuthority() {
         return authority.stream().map(x -> Authority.toEnum(x)).collect(Collectors.toSet());
     }
 
-    public void addAuthority(Authority Authority) {
-        this.authority.add(Authority.getCodigo());
+    public void addAuthority(Authority authority) {
+        this.authority.add(authority.getCodigo());
     }
 }

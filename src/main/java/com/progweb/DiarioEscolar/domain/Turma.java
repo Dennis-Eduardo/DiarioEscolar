@@ -49,8 +49,5 @@ public class Turma implements Serializable{
     @JoinColumn(name = "professorTurma_id", referencedColumnName = "id")
     private Professor professor;
 	
-	public void addAluno(Aluno aluno){
-		this.alunos.add(aluno);
-	}
 
 }
