@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -18,6 +19,8 @@ public class ProfessorService {
 	
 	@Autowired
 	private ProfessorRepository repository;
+	@Autowired 
+	private BCryptPasswordEncoder encoder;
 	
 	public Professor encontrarPorID(Long id){
 		Optional<Professor> obj = repository.findById(id);
@@ -30,6 +33,8 @@ public class ProfessorService {
 
 	public Professor adicionarProfessor(Professor professor) throws ExistingObjectSameNameException{
 		
+		professor.setSenha(encoder.encode(professor.getSenha()));
+
 		professor.addAuthority(Authority.PROF);
 		return repository.save(professor);
 	}

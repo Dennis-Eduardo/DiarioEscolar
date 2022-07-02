@@ -1,7 +1,6 @@
 package com.progweb.DiarioEscolar.settings.security;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

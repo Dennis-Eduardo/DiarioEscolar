@@ -43,7 +43,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
             //cria a autenticacao com username, senha e autenticacoes(array)
             UsernamePasswordAuthenticationToken authenticationToken =
-                                      new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), new ArrayList<>());
+                                      new UsernamePasswordAuthenticationToken(user.getNome(), user.getSenha(), new ArrayList<>());
 
             //verifica essas autenticacoes com a interface que autentifica esses dados 
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -65,6 +65,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             //retorno do response deve mandar se autorizo e o token
             response.setHeader("access-control-expose-headers", "Authorization");
             response.setHeader("Authorization", "Bearer "+ token);//deve retornar o bearer antes do token
+            
         }
 
     //caso nao der sucesso na autenticacao

@@ -1,6 +1,5 @@
 package com.progweb.DiarioEscolar.services;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import com.progweb.DiarioEscolar.domain.Pessoa;

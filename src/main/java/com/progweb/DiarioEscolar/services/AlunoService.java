@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.progweb.DiarioEscolar.domain.Aluno;
@@ -18,6 +19,8 @@ public class AlunoService {
 	
 	@Autowired
 	private AlunoRepository repository;
+	@Autowired 
+	private BCryptPasswordEncoder encoder;
 	
 	public Aluno encontrarPorID(Long id){
 		Optional<Aluno> obj = repository.findById(id);
@@ -30,6 +33,8 @@ public class AlunoService {
 
 	public Aluno adicionarAluno(Aluno aluno) throws ExistingObjectSameNameException{
 		
+		aluno.setSenha(encoder.encode(aluno.getSenha()));
+		//validacao
 		aluno.addAuthority(Authority.ALUNO);
 		return repository.save(aluno);
 	}

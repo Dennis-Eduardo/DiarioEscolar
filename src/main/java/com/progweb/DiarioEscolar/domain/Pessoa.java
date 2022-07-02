@@ -32,13 +32,13 @@ public abstract class Pessoa implements Serializable {
 	private Long id;
 
 	@Column
-	private String nome;
+	protected String nome;
 
 	@Column(unique = true)
-	private String matricula;
+	protected String matricula;
 
 	@Column( unique = true)
-	private String email;
+	protected String email;
 
 	 protected String senha;
 

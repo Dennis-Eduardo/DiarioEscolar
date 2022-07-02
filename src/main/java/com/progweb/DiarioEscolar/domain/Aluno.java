@@ -48,4 +48,12 @@ public class Aluno extends Pessoa{
 		this.turmas.add(turma);
 	}
 
+
+    public Aluno(String nome, String matricula, String email, String senha){
+		this.nome = nome;
+		this.matricula = matricula;
+		this.email = email;
+		this.senha = senha;
+    }
+
 }

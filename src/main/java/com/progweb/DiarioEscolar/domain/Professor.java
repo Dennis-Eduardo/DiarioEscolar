@@ -14,7 +14,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,4 +44,11 @@ public class Professor extends Pessoa{
 		this.turmas.add(turma);
 	}
 
+	public Professor(String nome, String matricula,String formacao, String email, String senha){
+		this.nome = nome;
+		this.matricula = matricula;
+		this.formacao = formacao;
+		this.email = email;
+		this.senha = senha;
+    }
 }

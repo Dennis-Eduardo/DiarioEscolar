@@ -5,7 +5,6 @@ package com.progweb.DiarioEscolar.settings;
 import com.progweb.DiarioEscolar.mappers.AlunoMapper;
 import com.progweb.DiarioEscolar.mappers.ProfessorMapper;
 import com.progweb.DiarioEscolar.mappers.TurmaMapper;
-import com.progweb.DiarioEscolar.mappers.UserMapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -32,11 +31,6 @@ public class MapperConfig {
     @Bean
     public TurmaMapper turmaMapper() {
         return new TurmaMapper();
-    }
-
-    @Bean
-    public UserMapper userMapper() {
-        return new UserMapper();
     }
 
 }

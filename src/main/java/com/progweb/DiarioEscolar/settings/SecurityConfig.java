@@ -25,8 +25,6 @@ import com.progweb.DiarioEscolar.settings.security.JWTUtil;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
     private UserDetailsService userDetailsService;
 	@Autowired
     private JWTUtil jwtUtil;
@@ -41,22 +39,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         "/configuration/ui",
         "/configuration/security",
         "/swagger-ui.html",
-        "/webjars/**"
+        "/webjars/**",
+        "/login"
         
     };
 
 
-    //rotas que precisam de autenticacao
-    private static final String[] PRIVATE_ROUTES ={
-        "/professores/**",
-        "/turmas/**",
-        "/alunos/**"
-    };
-
 	@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
-    }
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+	}
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {

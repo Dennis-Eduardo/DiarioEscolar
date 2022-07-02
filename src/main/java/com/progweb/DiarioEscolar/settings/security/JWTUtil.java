@@ -4,10 +4,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 @Component
@@ -24,7 +22,7 @@ public class JWTUtil {
         return Jwts.builder()
                     .setSubject(username)//gerar o token a apartir da informacao do username
                     .setExpiration(new Date(System.currentTimeMillis()+expiration))//tempo de expiracao é a hora atual mais 3 minutos
-                    .signWith(SignatureAlgorithm.HS512, secret.getBytes())//tipo do algoritmo para fazer o hash e o secredo
+                    .signWith(SignatureAlgorithm.HS256, secret.getBytes())//tipo do algoritmo para fazer o hash e o secredo
                     .compact();
     }
     //final gerar o filtro de autorizacao

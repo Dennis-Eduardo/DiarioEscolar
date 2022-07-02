@@ -1,7 +1,6 @@
 package com.progweb.DiarioEscolar.domain;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,7 @@ public class User implements UserDetails{
     private static final long serialVerionUID = 1L;
 
     private Long id;
-    private String userName;
+    private String username;
     private String password;
     private Collection<? extends GrantedAuthority> Authorities;
 
@@ -37,7 +36,7 @@ public class User implements UserDetails{
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     //conta nao esta expirada?
@@ -63,9 +62,9 @@ public class User implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
-    public User(Long id, String userName, String password, Set<Authority> authority) {
+    public User(Long id, String username, String password, Set<Authority> authority) {
         this.id = id;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         Authorities = authority.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toSet());
     }
