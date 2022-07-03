@@ -27,7 +27,7 @@ public class DiarioEscolarApplication implements CommandLineRunner{
 		SpringApplication.run(DiarioEscolarApplication.class, args);
 	}
 
-
+//REMOVERRRRRRRRRRRRRRRRR
 	//instanciar uma conta padrao no banco de dados de aluno e professor
 	@Override
 	public void run(String... args) throws Exception{

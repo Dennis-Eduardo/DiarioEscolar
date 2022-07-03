@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlunoDTO {
     
+    public AlunoDTO(String nome2, String matricula2, String email2, String senha2) {
+    }
     private Long id;
     private String nome;
     private String matricula;
